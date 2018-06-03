@@ -4,7 +4,7 @@ package de.kayteem.lib.pdftools.exceptions;
 /**
  * Author:      Tobias Mielke
  * Created:     01.06.2018
- * Modified:    01.06.2018
+ * Modified:    03.06.2018
  */
 public class StringPatternNotFoundException extends Exception {
 
@@ -14,6 +14,12 @@ public class StringPatternNotFoundException extends Exception {
                 requestedOccurrence,
                 stringPattern,
                 found
+        ));
+    }
+
+    public StringPatternNotFoundException(String stringPattern) {
+        super(String.format(
+                "String pattern \"%s\" not found!", stringPattern
         ));
     }
 

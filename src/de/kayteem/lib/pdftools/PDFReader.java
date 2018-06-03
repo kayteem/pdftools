@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
 /**
  * Author:      Tobias Mielke
  * Created:     01.06.2018
- * Modified:    01.06.2018
+ * Modified:    03.06.2018
  */
 public class PDFReader implements IPDFReader {
 
@@ -81,6 +81,12 @@ public class PDFReader implements IPDFReader {
     }
 
 
+    // IMPLEMENTATION (Retrieve occurrence)
+    public int getOccurrences(String stringPattern) throws StringPatternNotFoundException {
+        return getLinesContaining(stringPattern).size();
+    }
+
+
     // IMPLEMENTATION (Retrieve line indices)
     public List<Integer> getIndicesOfLinesContaining(String stringPattern) {
         List<Integer> lineIndices = new ArrayList<>();
@@ -104,6 +110,13 @@ public class PDFReader implements IPDFReader {
         return getIndexOfLineContaining(stringPattern, 1);
     }
 
+    public Integer getIndexOfLastLineContaining(String stringPattern) {
+        List<Integer> indices = getIndicesOfLinesContaining(stringPattern);
+        int lastIdx = indices.size() - 1;
+
+        return getIndexOfLineContaining(stringPattern, indices.get(lastIdx));
+    }
+
 
     // IMPLEMENTATION (Retrieve lines)
     public List<String> getAllLines() {
@@ -121,13 +134,17 @@ public class PDFReader implements IPDFReader {
         return pdfLines.get(lineIdx);
     }
 
-    public List<String> getLinesContaining(String stringPattern) {
+    public List<String> getLinesContaining(String stringPattern) throws StringPatternNotFoundException {
         List<String> lines = new ArrayList<>();
 
         for (String line : pdfLines) {
             if (line.contains(stringPattern)) {
                 lines.add(line);
             }
+        }
+
+        if (lines.isEmpty()) {
+            throw new StringPatternNotFoundException(stringPattern);
         }
 
         return lines;
@@ -147,6 +164,13 @@ public class PDFReader implements IPDFReader {
         return getLineContaining(stringPattern, 1);
     }
 
+    public String getLastLineContaining(String stringPattern) throws StringPatternNotFoundException {
+        List<String> lines = getLinesContaining(stringPattern);
+        int lastIdx = lines.size() - 1;
+
+        return lines.get(lastIdx);
+    }
+
 
     // IMPLEMENTATION (Retrieve words)
     public List<String> getWordsOfLine(int lineIdx) throws LineIndexDoesNotExistException {
@@ -162,7 +186,13 @@ public class PDFReader implements IPDFReader {
     }
 
     public List<String> getWordsOfFirstLineContaining(String stringPattern) throws StringPatternNotFoundException {
-        String line = getLineContaining(stringPattern, 1);
+        String line = getFirstLineContaining(stringPattern);
+
+        return getWordsInString(line);
+    }
+
+    public List<String> getWordsOfLastLineContaining(String stringPattern) throws StringPatternNotFoundException {
+        String line = getLastLineContaining(stringPattern);
 
         return getWordsInString(line);
     }
@@ -181,6 +211,10 @@ public class PDFReader implements IPDFReader {
 
     public String getWordOfFirstLineContaining(String stringPattern, int wordIdx) throws StringPatternNotFoundException {
         return getWordsOfFirstLineContaining(stringPattern).get(wordIdx);
+    }
+
+    public String getWordOfLastLineContaining(String stringPattern, int wordIdx) throws StringPatternNotFoundException {
+        return getWordsOfLastLineContaining(stringPattern).get(wordIdx);
     }
 
 
