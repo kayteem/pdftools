@@ -123,6 +123,24 @@ public class PDFReader implements IPDFReader {
         return pdfLines;
     }
 
+    public List<String> getLines(int startIdx, int endIdx) throws LineIndexDoesNotExistException {
+
+        // [1] - Check indices.
+        if (startIdx >= pdfLines.size()) {
+            throw new LineIndexDoesNotExistException(startIdx, pdfLines.size());
+        }
+        if (endIdx>= pdfLines.size()) {
+            throw new LineIndexDoesNotExistException(endIdx, pdfLines.size());
+        }
+
+        List<String> lines = new ArrayList<>();
+        for (int i = startIdx; i <= endIdx; i++) {
+            lines.add(pdfLines.get(i));
+        }
+
+        return lines;
+    }
+
     public String getLine(int lineIdx) throws LineIndexDoesNotExistException {
 
         // [1] - Check idx.

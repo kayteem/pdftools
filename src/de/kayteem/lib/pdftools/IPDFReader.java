@@ -1,5 +1,6 @@
 package de.kayteem.lib.pdftools;
 
+
 import de.kayteem.lib.pdftools.exceptions.DocumentNotAssignedException;
 import de.kayteem.lib.pdftools.exceptions.LineIndexDoesNotExistException;
 import de.kayteem.lib.pdftools.exceptions.StringPatternNotFoundException;
@@ -31,6 +32,7 @@ public interface IPDFReader {
 
     // Retrieve lines.
     List<String> getAllLines();
+    List<String> getLines(int startIdx, int endIdx) throws LineIndexDoesNotExistException;
     String getLine(int lineIdx) throws LineIndexDoesNotExistException;
     List<String> getLinesContaining(String stringPattern) throws StringPatternNotFoundException;
     String getLineContaining(String stringPattern, int occurrence) throws StringPatternNotFoundException;
